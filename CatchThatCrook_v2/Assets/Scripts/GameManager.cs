@@ -17,25 +17,10 @@ public class GameManager : MonoBehaviour
     /// </summary>
     UIManager uiManager;
     /// <summary>
-    /// Player GameObject reference
-    /// </summary>
-    [SerializeField]
-    GameObject player;
-    /// <summary>
     /// TextMeshProUGUI component to display the score
     /// </summary>
     [SerializeField]
     TextMeshProUGUI scoreText;
-    /// <summary>
-    /// Prefab for the NPC to spawn
-    /// </summary>
-    [SerializeField]
-    GameObject npcPrefab;
-    /// <summary>
-    /// Prefab for the child NPC that follows the main NPC
-    /// </summary>
-    [SerializeField]
-    GameObject npcchildPrefab;
     /// <summary>
     /// Spawn point for NPCs
     /// </summary>
@@ -95,26 +80,6 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public int thievesCaught = 0;
     /// <summary>
-    /// Main camera in the scene
-    /// </summary>
-    [SerializeField]
-    Camera mainCamera;
-    /// <summary>
-    /// Menu camera in the scene
-    /// </summary>
-    [SerializeField]
-    Camera menuCamera;
-    /// <summary>
-    /// Prefab for the roaming NPC
-    /// </summary>
-    [SerializeField]
-    GameObject roamingNPC;
-    /// <summary>
-    /// Transform for the roaming NPC spawn point
-    /// </summary>
-    [SerializeField]
-    Transform roamingNPCSpawn;
-    /// <summary>
     /// Particle system for the red dust effect when a thief escapes
     /// </summary>
     public ParticleSystem redDustEffect;
@@ -155,21 +120,16 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Cursor.lockState = CursorLockMode.None; // Unlock the cursor
+        Cursor.visible = true;
         // Check if the game is in the main menu
         if (uiManager.Menu.enabled)
         {
-            menuCamera.enabled = true; // Enable the menu camera when in menu
-            mainCamera.enabled = false; // Disable the main camera when in menu
-            Cursor.visible = true; // Show the cursor when in menu
-            Cursor.lockState = CursorLockMode.None; // Unlock the cursor when in menu
-            player.SetActive(false); // Disable the player GameObject when in menu
             isSpawning = false; // Reset the spawning flag when in menu
             CancelInvoke("SpawnNPC"); // Stop invoking the SpawnNPC method if in menu
         }
         else
         {
-            menuCamera.enabled = false; // Disable the menu camera when not in menu
-            mainCamera.enabled = true; // Enable the main camera when not in menu
             if (!isSpawning) // Check if NPCs are not currently spawning
             {
                 isSpawning = true; // Set the flag to true to prevent multiple coroutines
@@ -188,13 +148,6 @@ public class GameManager : MonoBehaviour
                     Cursor.visible = true; // Show the cursor when game is over
                     Cursor.lockState = CursorLockMode.None; // Unlock the cursor when game is over
                 }
-            }
-            else
-            {
-                Cursor.visible = true; // Show the cursor when not in menu
-                Cursor.lockState = CursorLockMode.None; // Lock the cursor when not in menu
-                player.SetActive(true); // Enable the player GameObject when not in menu
-                mainCamera.enabled = true; // Enable the main camera when not in menu
             }
         }
         // Check if the player presses the Q key to go back to the main menu
